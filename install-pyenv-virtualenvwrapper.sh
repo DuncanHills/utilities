@@ -1,12 +1,25 @@
 #!/bin/bash
 set -ue
 
-shellprofile="${HOME}/.bash_profile"
+# Installs virtualenv, virtualenvwrapper, and pyenv
+# Take a look at the variables below for options.
+
+# Sets up everything in the current directory. You probably want to run this in ~
 installdir=$(pwd)
+# Change this if you aren't using bash or want to put it somewhere else
+# (like .bashrc on Ubuntu).
+shellprofile="${HOME}/.bash_profile"
+# Where pyenv lives.
 pyenvsubdir=".pyenv"
+# Where virtualenvs live.
 virtualenvsubdir=".virtualenvs"
+# Subdirectory where new projects will be created.
 projectsubdir=""
+# Disable to initialize virtualenvwrapper when the shell starts. Can be a bit slow,
+# but if lazy loading is enabled you won't get tab completion until after your first
+# virtualenvwrapper command is executed "e.g. `workon`"
 uselazyloading=true
+# Set this to true if you are on OS X and using homebrew (you should be)
 usehomebrew=false
 
 gitclobber() {

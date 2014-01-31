@@ -26,12 +26,17 @@ gitclobber() {
     if [ -z "$1" -o -z "$2" ]; then
         echo "Wrong number of arguments to gitclobber()" &>2
     fi
-
-    rm -rf "${2}/.git"
-    git clone --no-checkout "$1" .gitclobber
-    mv -f .gitclobber/.git "$2"
-    rm -r .gitclobber
-    git --git-dir="${2}/.git" --work-tree="$2" reset --hard HEAD
+    
+    gitdir="${2}/.git"
+    if [ -d "$gitdir" ]; then
+        rm -rf "$gitdir"
+        git clone --no-checkout "$1" .gitclobber
+        mv -f .gitclobber/.git "$2"
+        rm -r .gitclobber
+        git --git-dir="$gitdir" --work-tree="$2" reset --hard HEAD
+    else
+        git clone "$1" "$2"
+    fi
 }
 
 if $uselazyloading; then
@@ -43,7 +48,7 @@ fi
 if $usehomebrew; then
     brew install pyenv pyenv-virtualenv
 else
-    gitclobber git://github.com/yyuu/pyenv.git "$pyenvsubdir/plugins/pyenv"
+    gitclobber git://github.com/yyuu/pyenv.git "$pyenvsubdir"
     gitclobber https://github.com/yyuu/pyenv-virtualenv.git "$pyenvsubdir/plugins/pyenv-virtualenv"
 fi
 gitclobber https://github.com/yyuu/pyenv-virtualenvwrapper.git "$pyenvsubdir/plugins/pyenv-virtualenvwrapper"
